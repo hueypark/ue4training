@@ -1,5 +1,6 @@
 ﻿#include "HackAndSlashCharacter.h"
 
+#include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -39,9 +40,21 @@ void AHackAndSlashCharacter::BeginPlay()
 	Super::BeginPlay();
 }
 
+void AHackAndSlashCharacter::MoveToLocation(const FVector Location)
+{
+	ServerMoveToLocation(Location);
+}
+
 void AHackAndSlashCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
+
+void AHackAndSlashCharacter::ServerMoveToLocation_Implementation(const FVector Location)
+{
+	float const Distance = FVector::Dist(Location, GetActorLocation());
+
+	UAIBlueprintHelperLibrary::SimpleMoveToLocation(GetController(), Location);
 }
 
 void AHackAndSlashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

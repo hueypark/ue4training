@@ -1,6 +1,6 @@
 #include "HackAndSlashPlayerController.h"
 
-#include "Blueprint/AIBlueprintHelperLibrary.h"
+#include "HackAndSlashCharacter.h"
 
 AHackAndSlashPlayerController::AHackAndSlashPlayerController()
 {
@@ -17,8 +17,14 @@ void AHackAndSlashPlayerController::SetupInputComponent()
 
 void AHackAndSlashPlayerController::MoveToMouseCursor()
 {
+	AHackAndSlashCharacter* HackAndSlashCharacter = Cast<AHackAndSlashCharacter>(GetPawn());
+	if (!HackAndSlashCharacter)
+	{
+		return;
+	}
+
 	FHitResult TraceHitResult;
 	GetHitResultUnderCursor(ECC_Visibility, true, TraceHitResult);
 
-	UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, TraceHitResult.Location);
+	HackAndSlashCharacter->MoveToLocation(TraceHitResult.Location);
 }

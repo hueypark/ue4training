@@ -19,8 +19,15 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
+	// 위치로 이동한다.
+	void MoveToLocation(const FVector Location);
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	// 서버에서 위치로 이동한다.
+	UFUNCTION(Server, Reliable)
+	void ServerMoveToLocation(const FVector Location);
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
