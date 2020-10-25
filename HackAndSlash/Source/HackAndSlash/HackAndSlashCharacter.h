@@ -24,6 +24,12 @@ public:
 	/** Returns CursorToWorld subobject **/
 	FORCEINLINE class UDecalComponent* GetCursorToWorld() { return CursorToWorld; }
 
+	// 위치로 이동한다.
+	void MoveToLocation(const FVector Location);
+
+	UFUNCTION(Server, Reliable)
+	void ServerMoveToLocation(const FVector Location);
+
 private:
 	/** Top down camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))

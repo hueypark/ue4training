@@ -86,17 +86,13 @@ void AHackAndSlashPlayerController::MoveToTouchLocation(const ETouchIndex::Type 
 
 void AHackAndSlashPlayerController::SetNewMoveDestination(const FVector DestLocation)
 {
-	APawn* const MyPawn = GetPawn();
-	if (MyPawn)
+	AHackAndSlashCharacter* MyPawn = Cast<AHackAndSlashCharacter>(GetPawn());
+	if (!MyPawn)
 	{
-		float const Distance = FVector::Dist(DestLocation, MyPawn->GetActorLocation());
-
-		// We need to issue move command only if far enough in order for walk animation to play correctly
-		if ((Distance > 120.0f))
-		{
-			UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, DestLocation);
-		}
+		return;
 	}
+
+	MyPawn->MoveToLocation(DestLocation);
 }
 
 void AHackAndSlashPlayerController::OnSetDestinationPressed()

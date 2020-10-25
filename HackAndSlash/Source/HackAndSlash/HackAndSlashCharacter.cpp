@@ -1,6 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "HackAndSlashCharacter.h"
+#include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Camera/CameraComponent.h"
 #include "Components/DecalComponent.h"
@@ -55,6 +56,9 @@ AHackAndSlashCharacter::AHackAndSlashCharacter()
 	// Activate ticking in order to update the cursor every frame.
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
+
+	SetReplicates(true);
+	SetReplicateMovement(true);
 }
 
 void AHackAndSlashCharacter::Tick(float DeltaSeconds)
@@ -86,5 +90,21 @@ void AHackAndSlashCharacter::Tick(float DeltaSeconds)
 			CursorToWorld->SetWorldLocation(TraceHitResult.Location);
 			CursorToWorld->SetWorldRotation(CursorR);
 		}
+	}
+}
+
+void AHackAndSlashCharacter::MoveToLocation(const FVector Location)
+{
+	ServerMoveToLocation(Location);
+}
+
+void AHackAndSlashCharacter::ServerMoveToLocation_Implementation(const FVector Location)
+{
+	float const Distance = FVector::Dist(Location, GetActorLocation());
+
+	// We need to issue move command only if far enough in order for walk animation to play correctly
+	if ((Distance > 120.0f))
+	{
+		UAIBlueprintHelperLibrary::SimpleMoveToLocation(GetController(), Location);
 	}
 }
