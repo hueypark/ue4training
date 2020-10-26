@@ -38,6 +38,8 @@ AHackAndSlashCharacter::AHackAndSlashCharacter()
 void AHackAndSlashCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	NormalAttackTarget = nullptr;
 }
 
 void AHackAndSlashCharacter::MoveToLocation(const FVector Location)
@@ -55,6 +57,11 @@ void AHackAndSlashCharacter::ServerMoveToLocation_Implementation(const FVector L
 	float const Distance = FVector::Dist(Location, GetActorLocation());
 
 	UAIBlueprintHelperLibrary::SimpleMoveToLocation(GetController(), Location);
+}
+
+void AHackAndSlashCharacter::SetNormalAttackTarget(AHackAndSlashCharacter* Target)
+{
+	NormalAttackTarget = Target;
 }
 
 void AHackAndSlashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

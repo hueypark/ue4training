@@ -16,6 +16,9 @@ public:
 protected:
 	virtual void SetupInputComponent() override;
 
+	// 일반 공격 대상 찾기
+	void FindNormalAttackTarget();
+
 	// 마우스 커서 위치로 이동
 	void MoveToMouseCursor();
 };

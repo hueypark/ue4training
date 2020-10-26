@@ -29,6 +29,9 @@ public:
 	UFUNCTION(Server, Reliable)
 	void ServerMoveToLocation(const FVector Location);
 
+	// 일반 공격 대상을 설정한다.
+	void SetNormalAttackTarget(AHackAndSlashCharacter* target);
+
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
@@ -40,4 +43,7 @@ private:
 	/** Top down camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* TopDownCameraComponent;
+
+	// 일반 공격 대상
+	TWeakObjectPtr<class AHackAndSlashCharacter> NormalAttackTarget;
 };
