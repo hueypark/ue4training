@@ -1,6 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "HackAndSlashGameModeBase.h"
+
 #include "HackAndSlashPlayerController.h"
 
 AHackAndSlashGameModeBase::AHackAndSlashGameModeBase()
@@ -8,7 +9,7 @@ AHackAndSlashGameModeBase::AHackAndSlashGameModeBase()
 	PlayerControllerClass = AHackAndSlashPlayerController::StaticClass();
 
 	// set default pawn class to our Blueprinted character
-	static ConstructorHelpers::FClassFinder<APawn> DefaultPawnBPClass(TEXT("/Game/Character/HackAndSlashCharacter"));
+	static ConstructorHelpers::FClassFinder<APawn> DefaultPawnBPClass(TEXT("/Game/Character/BP_HackAndSlashCharacter"));
 	if (DefaultPawnBPClass.Class != NULL)
 	{
 		DefaultPawnClass = DefaultPawnBPClass.Class;

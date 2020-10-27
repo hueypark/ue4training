@@ -46,4 +46,7 @@ private:
 
 	// 일반 공격 대상
 	TWeakObjectPtr<class AHackAndSlashCharacter> NormalAttackTarget;
+
+	// 검
+	TSubclassOf<class ASword> Sword;
 };

@@ -4,6 +4,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "HackAndSlash/Sword.h"
 
 AHackAndSlashCharacter::AHackAndSlashCharacter()
 {
@@ -33,6 +34,12 @@ AHackAndSlashCharacter::AHackAndSlashCharacter()
 	TopDownCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("TopDownCamera"));
 	TopDownCameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	TopDownCameraComponent->bUsePawnControlRotation = false;	// Camera does not rotate relative to arm
+
+	static ConstructorHelpers::FClassFinder<ASword> SwordClass(TEXT("/Game/Character/BP_Sword"));
+	if (SwordClass.Class != nullptr)
+	{
+		Sword = SwordClass.Class;
+	}
 }
 
 void AHackAndSlashCharacter::BeginPlay()
@@ -62,6 +69,11 @@ void AHackAndSlashCharacter::ServerMoveToLocation_Implementation(const FVector L
 void AHackAndSlashCharacter::SetNormalAttackTarget(AHackAndSlashCharacter* Target)
 {
 	NormalAttackTarget = Target;
+
+	FVector Dir = Target->GetActorLocation() - GetActorLocation();
+	Dir.Normalize();
+
+	GetWorld()->SpawnActor<ASword>(Sword, GetActorLocation() + (Dir * 100), Dir.Rotation());
 }
 
 void AHackAndSlashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
