@@ -29,8 +29,16 @@ public:
 	UFUNCTION(Server, Reliable)
 	void ServerMoveToLocation(const FVector Location);
 
+	// 서버에서 일반 공격 대상을 설정한다.
+	UFUNCTION(Server, Reliable)
+	void ServerSetNormalAttackTarget(AHackAndSlashCharacter* Target);
+
+	// 서버에서 일반 공격 대상 공격을 시도한다.
+	UFUNCTION(Server, Reliable)
+	void ServerTryNormalAttack();
+
 	// 일반 공격 대상을 설정한다.
-	void SetNormalAttackTarget(AHackAndSlashCharacter* target);
+	void SetNormalAttackTarget(AHackAndSlashCharacter* Target);
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -49,4 +57,10 @@ private:
 
 	// 검
 	TSubclassOf<class ASword> Sword;
+
+	// 공격속도
+	float AttackCoolTime;
+
+	// 다음 공격 가능시간
+	FDateTime NextAttackableTime;
 };

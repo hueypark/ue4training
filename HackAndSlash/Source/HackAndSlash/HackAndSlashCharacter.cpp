@@ -40,6 +40,8 @@ AHackAndSlashCharacter::AHackAndSlashCharacter()
 	{
 		Sword = SwordClass.Class;
 	}
+
+	AttackCoolTime = 1000;
 }
 
 void AHackAndSlashCharacter::BeginPlay()
@@ -47,6 +49,8 @@ void AHackAndSlashCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	NormalAttackTarget = nullptr;
+
+	NextAttackableTime = FDateTime::Now();
 }
 
 void AHackAndSlashCharacter::MoveToLocation(const FVector Location)
@@ -57,6 +61,8 @@ void AHackAndSlashCharacter::MoveToLocation(const FVector Location)
 void AHackAndSlashCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	ServerTryNormalAttack();
 }
 
 void AHackAndSlashCharacter::ServerMoveToLocation_Implementation(const FVector Location)
@@ -66,14 +72,33 @@ void AHackAndSlashCharacter::ServerMoveToLocation_Implementation(const FVector L
 	UAIBlueprintHelperLibrary::SimpleMoveToLocation(GetController(), Location);
 }
 
-void AHackAndSlashCharacter::SetNormalAttackTarget(AHackAndSlashCharacter* Target)
+void AHackAndSlashCharacter::ServerSetNormalAttackTarget_Implementation(AHackAndSlashCharacter* Target)
 {
 	NormalAttackTarget = Target;
+}
+
+void AHackAndSlashCharacter::ServerTryNormalAttack_Implementation()
+{
+	FDateTime Now = FDateTime::Now();
+
+	AHackAndSlashCharacter* Target = NormalAttackTarget.Get();
+	if (!Target)
+		return;
+
+	if (Now <= NextAttackableTime)
+		return;
+
+	NextAttackableTime = Now + FTimespan::FromMilliseconds(AttackCoolTime);
 
 	FVector Dir = Target->GetActorLocation() - GetActorLocation();
 	Dir.Normalize();
 
 	GetWorld()->SpawnActor<ASword>(Sword, GetActorLocation() + (Dir * 100), Dir.Rotation());
+}
+
+void AHackAndSlashCharacter::SetNormalAttackTarget(AHackAndSlashCharacter* Target)
+{
+	ServerSetNormalAttackTarget(Target);
 }
 
 void AHackAndSlashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

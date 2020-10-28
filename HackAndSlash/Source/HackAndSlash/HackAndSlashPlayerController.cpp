@@ -20,11 +20,6 @@ void AHackAndSlashPlayerController::FindNormalAttackTarget()
 	GetHitResultUnderCursor(ECC_Visibility, true, TraceHitResult);
 
 	AHackAndSlashCharacter* Target = Cast<AHackAndSlashCharacter>(TraceHitResult.GetActor());
-	if (!Target)
-	{
-		return;
-	}
-
 	if (HackAndSlashCharacter == Target)
 	{
 		return;

@@ -4,6 +4,8 @@
 
 ASword::ASword()
 {
+	bReplicates = true;
+
 	PrimaryActorTick.bCanEverTick = true;
 }
 
